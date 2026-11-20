@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelForge — Boutique</title>
+<style>
+  :root{
+    --ink:#080b18;        /* noir profond */
+    --bg:#0b0f1e;
+    --bg-2:#0f1526;
+    --card:#121a2e;
+    --line:#1e2a47;
+    --line-2:#27365c;
+    --text:#eaf0ff;
+    --muted:#8b9ac4;
+    --blue-900:#0a1f5c;
+    --blue-700:#1447e6;
+    --blue-500:#2f6bfa;
+    --blue-400:#4f8cff;
+    --blue-300:#7fb0ff;
+    --blue-200:#a9c8ff;
+    --blue-100:#d6e4ff;
+    --glow:0 12px 34px rgba(47,107,250,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Helvetica Neue",Inter,Arial,sans-serif;background:var(--bg);
+    background-image:radial-gradient(900px 500px at 15% -10%,rgba(47,107,250,.18),transparent 60%),
+                     radial-gradient(700px 400px at 100% 0%,rgba(20,71,230,.14),transparent 60%);
+    background-attachment:fixed;color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+  header{padding:20px 0;border-bottom:1px solid var(--line);position:sticky;top:0;
+    background:rgba(8,11,24,.82);backdrop-filter:blur(12px);z-index:10}
+  header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .logo{font-weight:800;font-size:1.2rem;letter-spacing:-.02em;color:var(--blue-300)}
+  .logo span{color:var(--text)}
+  nav a{margin-right:22px;font-size:.9rem;color:var(--muted);transition:color .2s}
+  nav a:hover{color:var(--blue-300)}
+  .cart-btn{background:linear-gradient(135deg,var(--blue-700),var(--blue-400));color:#fff;border:none;
+    padding:11px 22px;border-radius:10px;cursor:pointer;font-weight:600;box-shadow:var(--glow);transition:.2s}
+  .cart-btn:hover{filter:brightness(1.12)}
+
+  .head{margin:52px 0 26px}
+  h1{font-size:2.5rem;letter-spacing:-.03em;color:#fff}
+  h1 em{font-style:normal;color:var(--blue-400)}
+  .head p{color:var(--muted);margin-top:6px}
+  .layout{display:grid;grid-template-columns:240px 1fr;gap:34px;align-items:start;margin-bottom:80px}
+
+  aside{position:sticky;top:92px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;
+    box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  aside h2{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+  .cat-list{list-style:none;display:flex;flex-direction:column;gap:3px}
+  .cat-list button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;background:none;
+    border:none;font:inherit;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--blue-100);transition:.18s}
+  .cat-list button:hover{background:var(--bg-2);color:#fff}
+  .cat-list button.active{background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:#fff;box-shadow:var(--glow)}
+  .cat-list .n{font-size:.74rem;color:var(--muted);border-radius:999px;padding:2px 9px;background:var(--bg-2)}
+  .cat-list button.active .n{color:#fff;background:rgba(255,255,255,.18)}
+  .aside-note{font-size:.77rem;color:var(--muted);border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+
+  .toolbar{display:grid;gap:12px;margin-bottom:18px}
+  .toolbar input{width:100%;border:1px solid var(--line-2);background:var(--card);color:var(--text);
+    padding:13px 18px;border-radius:12px;font:inherit;transition:.18s}
+  .toolbar input::placeholder{color:#6b7ba6}
+  .toolbar input:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 4px rgba(47,107,250,.18)}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .toolbar select{border:1px solid var(--line-2);background:var(--card);color:var(--text);padding:11px 14px;border-radius:12px;font:inherit}
+  .toolbar select:focus{outline:none;border-color:var(--blue-500)}
+  .count{color:var(--muted);font-size:.88rem}
+  .chips{margin-bottom:20px}
+  .chip{display:inline-flex;align-items:center;gap:10px;background:rgba(47,107,250,.14);color:var(--blue-200);
+    border:1px solid rgba(79,140,255,.32);font-weight:600;border-radius:999px;padding:7px 16px;font-size:.82rem}
+  .chip button{background:rgba(79,140,255,.2);border:none;cursor:pointer;color:var(--blue-100);
+    border-radius:50%;width:20px;height:20px;line-height:1;font-size:.8rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;
+    flex-direction:column;transition:.22s;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+    background:linear-gradient(90deg,var(--c1),var(--c2));opacity:.9}
+  .card:hover{transform:translateY(-5px);border-color:var(--line-2);box-shadow:0 20px 44px rgba(6,10,24,.6),var(--glow)}
+
+  /* Variations de bleu, du plus foncé au plus clair, selon la famille */
+  .cat-Processeurs      {--c1:#0a1f5c;--c2:#1447e6}
+  .cat-Cartes           {--c1:#1447e6;--c2:#4f8cff}
+  .cat-Mémoire          {--c1:#1d3f9e;--c2:#2f6bfa}
+  .cat-Stockage         {--c1:#0d2b7a;--c2:#3b7bff}
+  .cat-Alimentations    {--c1:#2f6bfa;--c2:#a9c8ff}
+  .cat-Bo-tiers         {--c1:#0a1f5c;--c2:#2f6bfa}
+  .cat-Refroidissement  {--c1:#4f8cff;--c2:#d6e4ff}
+
+  .icon{font-size:2.5rem;text-align:center;border-radius:12px;padding:24px;margin-bottom:14px;
+    background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 55%,#080b18),color-mix(in srgb,var(--c2) 42%,#080b18));
+    border:1px solid var(--line-2)}
+  .cat{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    background:linear-gradient(90deg,var(--c2),var(--blue-100));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .card h3{font-size:1rem;margin:5px 0;color:#fff}
+  .card p{color:var(--muted);font-size:.85rem;flex:1}
+  .price{font-weight:800;font-size:1.2rem;margin:12px 0;color:var(--blue-200)}
+  .card button{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border:none;padding:11px;
+    border-radius:10px;cursor:pointer;font-weight:600;transition:.18s}
+  .card button:hover{filter:brightness(1.15);box-shadow:0 10px 24px color-mix(in srgb,var(--c2) 40%,transparent)}
+  .empty{color:var(--muted);padding:40px 0}
+
+  .overlay{position:fixed;inset:0;background:rgba(4,6,14,.7);display:none;z-index:20}
+  .drawer{position:fixed;top:0;right:-430px;width:400px;max-width:100%;height:100%;background:var(--bg-2);
+    border-left:1px solid var(--line);z-index:30;padding:28px;transition:right .32s;display:flex;flex-direction:column;
+    box-shadow:-24px 0 60px rgba(0,0,0,.6)}
+  .drawer.open{right:0}.overlay.open{display:block}
+  .drawer h2{font-size:1.2rem;color:#fff}
+  .items{flex:1;overflow-y:auto;margin:16px 0}
+  .item{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);gap:8px}
+  .item strong{color:#fff}
+  .item small{color:var(--muted)}
+  .qty{display:flex;align-items:center;gap:6px;color:var(--blue-100)}
+  .qty button{border:1px solid var(--line-2);background:var(--card);color:var(--blue-300);width:27px;height:27px;
+    border-radius:8px;cursor:pointer;font-weight:700}
+  .qty button:hover{background:var(--blue-700);color:#fff;border-color:var(--blue-700)}
+  .total{font-weight:800;font-size:1.15rem;margin-bottom:14px;padding-top:6px;color:#fff}
+  .checkout{background:linear-gradient(135deg,var(--blue-700),var(--blue-400));color:#fff;border:none;padding:14px;
+    border-radius:10px;cursor:pointer;font-weight:700;box-shadow:var(--glow)}
+  .close{background:none;border:none;font-size:1.4rem;cursor:pointer;float:right;color:var(--muted)}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(10px);color:#fff;padding:12px 24px;
+    border-radius:10px;opacity:0;transition:.3s;z-index:40;font-weight:600;
+    background:linear-gradient(135deg,var(--blue-700),var(--blue-500));box-shadow:var(--glow)}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  footer{padding:40px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;text-align:center}
+  ::selection{background:var(--blue-500);color:#fff}
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;gap:24px}
+    aside{position:static}
+    .cat-list{flex-direction:row;flex-wrap:wrap}
+    .cat-list li{flex:1 1 auto}
+    .cat-list button{width:auto;border:1px solid var(--line);border-radius:10px}
+    .aside-note{display:none}
+    nav{display:none}
+  }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a href="index.html" class="logo">Pixel<span>Forge</span></a>
+  <nav><a href="index.html">Accueil</a><a href="index.html#magasin">Magasin</a></nav>
+  <button class="cart-btn" onclick="toggleCart()">Panier (<span id="count">0</span>)</button>
+</div></header>
+
+<main class="wrap">
+  <div class="head">
+    <h1>Boutique <em>composants</em></h1>
+    <p><span id="shown">0</span> produits affichés sur <span id="total-prod">0</span></p>
+  </div>
+
+  <div class="layout">
+    <aside>
+      <h2>Par composant</h2>
+      <ul class="cat-list" id="catList"></ul>
+      <p class="aside-note">Cliquez sur une famille pour filtrer le catalogue.</p>
+    </aside>
+
+    <div>
+      <div class="toolbar">
+        <input id="search" placeholder="Rechercher un composant, une marque..." oninput="render()">
+        <div class="row">
+          <select id="sort" onchange="render()">
+            <option value="default">Trier par : pertinence</option>
+            <option value="asc">Prix croissant</option>
+            <option value="desc">Prix décroissant</option>
+            <option value="name">Nom (A-Z)</option>
+            <option value="cat">Catégorie (A-Z)</option>
+          </select>
+          <span class="count" id="countLabel"></span>
+        </div>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+</main>
+
+<footer>© 2026 PixelForge — Site fictif, aucune vente réelle.</footer>
+
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="drawer" id="drawer">
+  <div><button class="close" onclick="toggleCart()">✕</button><h2>Votre panier</h2></div>
+  <div class="items" id="items"></div>
+  <div class="total">Total : <span id="total">0,00 €</span></div>
+  <button class="checkout" onclick="checkout()">Commander</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const products = [
+  {id:1,name:"Ryzen 7 7800X3D",cat:"Processeurs",icon:"🧠",price:399.99,desc:"8 cœurs / 16 threads, socket AM5."},
+  {id:2,name:"Core i5-14600K",cat:"Processeurs",icon:"🧠",price:299.90,desc:"14 cœurs, socket LGA1700."},
+  {id:3,name:"GeForce RTX 4070 Super",cat:"Cartes graphiques",icon:"🎮",price:629.00,desc:"12 Go GDDR6X, ray tracing et DLSS 3."},
+  {id:4,name:"Radeon RX 7800 XT",cat:"Cartes graphiques",icon:"🎮",price:519.00,desc:"16 Go GDDR6, taillée pour le 1440p."},
+  {id:5,name:"Corsair Vengeance 32 Go DDR5",cat:"Mémoire RAM",icon:"💾",price:119.90,desc:"2x16 Go, 6000 MHz CL30."},
+  {id:6,name:"G.Skill Trident Z5 64 Go",cat:"Mémoire RAM",icon:"💾",price:229.00,desc:"2x32 Go DDR5 6400 MHz."},
+  {id:7,name:"Samsung 990 Pro 2 To",cat:"Stockage",icon:"💽",price:179.99,desc:"SSD NVMe PCIe 4.0, 7450 Mo/s."},
+  {id:8,name:"Seagate Barracuda 4 To",cat:"Stockage",icon:"💽",price:89.90,desc:"Disque dur 3,5\" 5400 tr/min."},
+  {id:9,name:"ASUS ROG Strix B650-A",cat:"Cartes mères",icon:"🔌",price:249.00,desc:"AM5, DDR5, Wi-Fi 6E."},
+  {id:10,name:"MSI MAG Z790 Tomahawk",cat:"Cartes mères",icon:"🔌",price:279.00,desc:"LGA1700, DDR5, 2.5G LAN."},
+  {id:11,name:"Corsair RM850e",cat:"Alimentations",icon:"🔋",price:129.90,desc:"850 W, 80+ Gold, modulaire."},
+  {id:12,name:"NZXT H7 Flow",cat:"Boîtiers",icon:"🖥️",price:139.00,desc:"Moyen tour, excellent flux d'air."},
+  {id:13,name:"Noctua NH-D15",cat:"Refroidissement",icon:"❄️",price:109.90,desc:"Ventirad double tour silencieux."},
+  {id:14,name:"Arctic Liquid Freezer III 360",cat:"Refroidissement",icon:"❄️",price:119.00,desc:"Watercooling AIO 360 mm."}
+];
+
+const ORDER = ["Processeurs","Cartes mères","Cartes graphiques","Mémoire RAM","Stockage","Alimentations","Boîtiers","Refroidissement"];
+
+/* Nuances de bleu par famille : [foncé, clair] */
+const COLORS = {
+  "Processeurs":      ["#0a1f5c","#1447e6"],
+  "Cartes mères":     ["#1447e6","#4f8cff"],
+  "Cartes graphiques":["#1447e6","#4f8cff"],
+  "Mémoire RAM":      ["#1d3f9e","#2f6bfa"],
+  "Stockage":         ["#0d2b7a","#3b7bff"],
+  "Alimentations":    ["#2f6bfa","#a9c8ff"],
+  "Boîtiers":         ["#0a1f5c","#2f6bfa"],
+  "Refroidissement":  ["#4f8cff","#d6e4ff"]
+};
+const colorClass = c => "cat-" + c.split(" ")[0].replace("è","e");
+
+let cart = JSON.parse(localStorage.getItem("pf_cart")||"[]");
+let activeCat = "Tous";
+const fmt = n => n.toFixed(2).replace(".",",")+" €";
+const countOf = c => products.filter(p => p.cat === c).length;
+const usedCats = () => ORDER.filter(c => products.some(p => p.cat === c));
+
+function renderCatList(){
+  const cats = ["Tous", ...usedCats()];
+  catList.innerHTML = cats.map(c => {
+    const n = c === "Tous" ? products.length : countOf(c);
+    const col = COLORS[c] || ["#2f6bfa","#4f8cff"];
+    const active = c === activeCat;
+    /* pastille de couleur de la famille, sauf pour « Tous » */
+    const dot = c === "Tous" ? "" :
+      `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;
+        background:linear-gradient(135deg,${col[0]},${col[1]});margin-right:8px;
+        box-shadow:0 0 8px ${col[1]}"></span>`;
+    return `<li><button class="${active?'active':''}" onclick="setCat('${c}')">
+      <span style="display:flex;align-items:center">${dot}${c}</span><span class="n">${n}</span></button></li>`;
+  }).join("");
+}
+function setCat(c){ activeCat = c; renderCatList(); render(); }
+
+function render(){
+  const q = search.value.trim().toLowerCase(), s = sort.value;
+  let list = products.filter(p =>
+    (activeCat === "Tous" || p.cat === activeCat) &&
+    (p.name + " " + p.cat + " " + p.desc).toLowerCase().includes(q));
+
+  if(s === "asc")  list.sort((a,b) => a.price - b.price);
+  if(s === "desc") list.sort((a,b) => b.price - a.price);
+  if(s === "name") list.sort((a,b) => a.name.localeCompare(b.name, "fr"));
+  if(s === "cat")  list.sort((a,b) => a.cat.localeCompare(b.cat, "fr") || a.name.localeCompare(b.name, "fr"));
+
+  grid.innerHTML = list.length
+    ? list.map(p => `<div class="card ${colorClass(p.cat)}"><div class="icon">${p.icon}</div>
+        <span class="cat">${p.cat}</span><h3>${p.name}</h3><p>${p.desc}</p>
+        <div class="price">${fmt(p.price)}</div>
+        <button onclick="addToCart(${p.id})">Ajouter au panier</button></div>`).join("")
+    : `<p class="empty">Aucun composant ne correspond à cette recherche.</p>`;
+
+  shown.textContent = list.length;
+  totalProd.textContent = products.length;
+  countLabel.textContent = activeCat === "Tous" ? "Toutes les familles" : "Famille : " + activeCat;
+  chips.innerHTML = (activeCat !== "Tous" || q)
+    ? `<span class="chip">${activeCat !== "Tous" ? activeCat : "Toutes les familles"}
+        ${q ? " · « " + q + " »" : ""} <button onclick="resetFilters()" title="Effacer">✕</button></span>` : "";
+}
+function resetFilters(){ activeCat = "Tous"; search.value = ""; sort.value = "default"; renderCatList(); render(); }
+
+function save(){ localStorage.setItem("pf_cart", JSON.stringify(cart)); updateCart(); }
+function addToCart(id){ const i = cart.find(x => x.id === id); i ? i.qty++ : cart.push({id, qty:1}); save(); showToast("Ajouté au panier"); }
+function changeQty(id, d){ const i = cart.find(x => x.id === id); i.qty += d; if(i.qty <= 0) cart = cart.filter(x => x.id !== id); save(); }
+function updateCart(){
+  let t = 0, c = 0;
+  items.innerHTML = cart.length ? cart.map(i => {
+    const p = products.find(x => x.id === i.id); t += p.price * i.qty; c += i.qty;
+    const col = COLORS[p.cat] || ["#2f6bfa","#4f8cff"];
+    return `<div class="item"><div><strong>${p.name}</strong><br>
+      <small style="color:${col[1]}">${p.cat}</small> · <small>${fmt(p.price)}</small></div>
+      <div class="qty"><button onclick="changeQty(${i.id},-1)">−</button> ${i.qty}
+      <button onclick="changeQty(${i.id},1)">+</button></div></div>`;
+  }).join("") : "<p style='color:#8b9ac4'>Votre panier est vide.</p>";
+  total.textContent = fmt(t); count.textContent = c;
+}
+function toggleCart(){ drawer.classList.toggle("open"); overlay.classList.toggle("open"); }
+function checkout(){ if(!cart.length) return showToast("Votre panier est vide"); cart = []; save(); toggleCart(); showToast("Commande validée (fictive)"); }
+function showToast(m){ toast.textContent = m; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2000); }
+
+renderCatList(); render(); updateCart();
+</script>
+</body>
+</html>
